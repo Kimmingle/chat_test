@@ -1,0 +1,49 @@
+<%@ page language="java" contentType="text/html charset=UTF8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+	<title>채팅 테스트</title>
+	<script src="http://code.jquer.com/jquery-Latest.js" >
+	</script>
+</head>
+<body>
+	<div id = "warp">
+		<h2></h2>
+		<input>
+	
+	</div>
+
+	<script>
+	$(document).ready(function(){
+		var ws = new Websocket("")
+		
+		ws.onopen = function(e){  //서버에 연결되면
+			console.log("info: connection open");  //연결 메세지 출력
+		}
+		ws.onmessage = function(e){  //서버에 메세지 전송되면
+			console.log(e.data);  //전달 메세지 출력
+		}
+		
+		ws.onclose = function(e){
+			console.log("info: connection close");
+		}
+		
+		ws.onerror = function(e){
+			console.log("에러");
+		}
+		
+		//여기서 뭔 행위를 해야 위에 함수들이 실행. 지금은 대기
+		$("#btn1").click(function(e)){
+			e.preventDefault();
+			ws.send($())
+		}
+	});
+	</script>
+    
+</body>
+</html>

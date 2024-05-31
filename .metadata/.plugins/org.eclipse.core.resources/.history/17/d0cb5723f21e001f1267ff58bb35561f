@@ -1,0 +1,92 @@
+package com.morning.ctrl;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.mail.Session;
+import javax.websocket.OnClose;
+import javax.websocket.OnError;
+import javax.websocket.OnMessage;
+import javax.websocket.OnOpen;
+
+import org.apache.maven.model.Model;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+
+import com.fasterxml.jackson.databind.introspect.TypeResolutionContext.Basic;
+
+@Controller
+public class SocketController {
+	private static final List<Session> sessionList = new ArrayList<>();
+	private Logger log = LoggerFactory.getLogger(this.getClass());  //현재 클래스 
+	
+	public SocketController() {
+		//호출됨= 만들어짐
+		log.info("");
+	}
+	
+	@GetMapping("/")
+	public String viewPage() {
+		return "socketTesting";
+	}
+	
+	@GetMapping("/chat")
+	public String ChatStrat(Model model) {
+		return "socket/chatTest";
+	}
+	
+	//소켓이 정상연결되면
+	@OnOpen
+	public void onOpen(Session session) {
+		log.info("Open Session : "+session.getId());
+		
+		try {
+			final Basic basic = session.getBasicRemote();
+			basic.sendText("");
+			
+		}catch(Exception e) {
+			
+		}
+		sessionList.add(session);
+	}
+	
+	@OnMessage
+	public void onMessage(String message, Session session) {
+		final Basic basic = session.getBasicRemote();
+		basic.sendText("ss");
+		try {
+			final Basic basic = session.getBasicRemote();
+			basic.sendText("");
+			
+		}catch(Exception e) {
+			
+		}
+		//현재 세션을 가진 사람 모두에게 보냄
+		sendAllSessionToMessage(session, message);
+	}
+	
+	@OnError
+	public void onError(Throwable t, Session session) {
+		//에러뜨면 출력
+		log.info(t.getMessage()+"by session : " +session.getId());  //getId:세션 값
+	}
+	
+	@OnClose  //닫으면 호출될것
+	public void onClose(Session session) {
+		log.info("Session : "+session.getId());  //getId:세션 값
+
+		sessionList.remove(session);
+	}
+		
+	
+	
+	
+	private void sendAllSessionToMessage(Session self, String msg) {
+		//반복문으로 세션 계속 보냄
+		try {
+			for(Session s:SocketController)
+		
+	}
+}
