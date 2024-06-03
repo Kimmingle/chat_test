@@ -1,0 +1,99 @@
+package com.morning.ctrl;
+
+
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
+import javax.websocket.OnClose;
+import javax.websocket.OnError;
+import javax.websocket.OnMessage;
+import javax.websocket.OnOpen;
+import javax.websocket.RemoteEndpoint.Basic;
+import javax.websocket.Session;
+import javax.websocket.server.ServerEndpoint;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+
+@Controller
+@ServerEndpoint(value = "/socket.do")
+//유저 소켓@ServerEndpoint로 소켓 호출함
+//일단 메세지 저장은 나중에 생각
+//@ServerEndpoint(value = "/user")
+public class SocketController_user {
+
+	private static final List<Session> sessionList = new ArrayList<Session>();
+	
+	public SocketController_user(){
+		System.out.println("Create Socket");
+	}
+	
+	public class User{  //유저임을 구분하기위한 키
+		String key;
+		Session session;
+	}
+	
+	@GetMapping
+	public String viewPage() {
+		return "socket/chatTest";
+	}
+
+	@OnOpen  // socket 연결 시
+	public void onOpen(Session userSession){
+		System.out.println("open session : " + userSession.getId());
+		String msg = userSession.getId() + "입장";
+		User user = new User();
+		user.session = userSession; //이렇게 안하면 세션 부여 안댐?
+		user.key = UUID.randomUUID().toString().replace("-", "");  //UUID클래스로 유일한 식별자 만듦
+		try{
+			final Basic basic = userSession.getBasicRemote();
+			basic.sendText(msg);
+		}catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		sessionList.add(userSession);
+		sendAllSessionToMessage(userSession, msg);
+	}
+	
+	
+	
+	@OnMessage
+	public void onMessage (String message, Session userSession)throws IOException{
+		message = userSession.getId()+" : "+message; 
+		try {
+			//메세지 보낸 사람에게 표시됨
+			final Basic basic = userSession.getBasicRemote();
+			basic.sendText(message);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		// 다른 사람에게 메세지 보내기
+		sendAllSessionToMessage(userSession, message);
+	}
+	
+	@OnError
+	public void onError(Throwable e, Session session){
+		System.out.println(e.getMessage() + "by session : " + session.getId());
+	}
+	@OnClose
+	public void onClose(Session session){
+		System.out.println("Session : "+ session.getId() + " closed");
+		sessionList.remove(session);
+	}
+	
+	
+	private void sendAllSessionToMessage(Session self,String msg){ // 연결된 모든 사용자에게 메세지 전달
+		try {
+			for(Session s : SocketController_user.sessionList){
+				if(!self.getId().equals(s.getId())){ 
+					s.getBasicRemote().sendText(msg);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+}

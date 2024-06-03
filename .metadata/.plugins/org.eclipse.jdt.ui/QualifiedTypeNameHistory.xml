@@ -23,4 +23,5 @@
     <fullyQualifiedTypeName name="com.fasterxml.jackson.databind.introspect.TypeResolutionContext.Basic"/>
     <fullyQualifiedTypeName name="javax.websocket.Session"/>
     <fullyQualifiedTypeName name="org.apache.maven.model.Model"/>
+    <fullyQualifiedTypeName name="java.util.UUID"/>
 </qualifiedTypeNameHistroy>
