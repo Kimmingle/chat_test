@@ -36,8 +36,8 @@
 		<li><a href="${path2 }/socket.do">채팅 실습2</a></li>
 		<li><a href="${path2 }/socket3.do">채팅 실습3</a></li>
 
-		<li><a href="${path2 }/adminTest">관리자</a></li>
-		<li><a href="${path2 }/userTest">유저</a></li>
+		<li><a href="${path2 }/socket/adminTest">관리자</a></li>
+		<li><a href="${path2 }/socket/userTest">유저</a></li>
 	</ul>
 				
 			</div>
