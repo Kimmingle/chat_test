@@ -37,7 +37,7 @@
     			<form action="" method="" enctype="multipart/form-data"> <!-- enctype="multipart/form-data"는 바이너리 파일을 보낼때 사용 -->
              		<input id="file" type="file" name="file">
              		<input onclick="sendImg()" class="button is-light" type="submit" value="업로드">
-					<input onChange={selectFile} type="file"/>
+					
 					<!-- {selectFile}함수가 파일을 가져오는데 사용할 실제 함수가 될 것 -->
         		</form>
 
@@ -80,6 +80,9 @@
     						// Send 버튼을 누르거나 텍스트 박스에서 엔터를 치면 실행    
     						function sendMessage() {      // 텍스트 박스의 객체를 가져옴      
     							let message = document.getElementById("textMessage");      // 콘솔에 메세지를 남긴다.      
+    							var msg = JSON.parse(JSON.stringify(post));
+    							var key = uuid  //유저 고유번호 어떻게 불러오더라....
+    							
     							messageTextArea.value += "(나) => " + message.value + "\n";      // 소켓으로 보낸다.      
     							webSocket.send(message.value);       
     							console.log(message.value);
@@ -119,7 +122,7 @@
     						//파일을 선택하고 해당 파일의 이름을 메시지로 보내며 선택할 파일을 설정
     						function selectFile(e){  //e를 매개변수로 받음
     							sendMessage(e.target.files[0].name);  //첫번째로 선택된 파일의 이름 
-    							//파일 이름을 가져온 다음 설정된 메세지 기능에 전달 괄호안에는 파일에 대한정보, .name은 이름
+    							
     							setFile(e.target.files[0]);
     							//두개의 업데이터 함수 호출
     						}

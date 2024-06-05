@@ -1,9 +1,7 @@
 package com.morning.sok;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -79,7 +77,7 @@ public class BroadSocket {
   
   // browser에서 웹 소켓으로 접속하면 호출되는 함수
   @OnOpen
-  public void handleOpen(Session userSession) {
+  public void handleOpen(Session userSession) throws IOException {
     // 인라인 클래스 User를 생성
     User user = new User();
     // Unique키를 발급 ('-'는 제거한다.)
@@ -88,6 +86,7 @@ public class BroadSocket {
     user.session = userSession;
     // 유저 리스트에 등록한다.
     sessionUsers.add(user);
+    
     // 운영자 Client에 유저가 접속한 것을 알린다.
     Admin.visit(user.key);
   }
@@ -122,7 +121,7 @@ public class BroadSocket {
   
   
   // 운영자 client가 유저에게 메시지를 보내는 함수
-  public static void sendMessage(String key, String message) {
+  public static void sendMessage(String key, String message) { //(유저키,받은 메세지)
     // key로 접속 리스트에서 User 클래스를 탐색
     User user = getUser(key);
     // 접속 리스트에 User가 있으면(당연히 있다. 없으면 버그..)

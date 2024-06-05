@@ -110,7 +110,10 @@
     					form = $("<div class='float-left'></div>").attr("data-key",node.key).append(form);   // div를 감싸고 속성 data-key에 unique키 넣음.           
     					$("section").append(form);      // body에 추가한다.  
     					
-    					//textmsg.value"새로운 유저가 접속했습니다\n ";
+    					//textmsg.value"새로운 유저가 접속했습니다\n "; <--이거 토스트메세지로
+    					
+    					
+    					
     					
     				} else if(node.status === "message") {          // message는 유저가 메시지를 보낼 때 알려주는 메시지.   
     					let $div = $("[data-key='"+node.key+"']");       // key로 해당 div영역을 찾는다.           
