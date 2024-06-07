@@ -127,8 +127,13 @@ public class BroadSocket {
     // 접속 리스트에 User가 있으면(당연히 있다. 없으면 버그..)
     if (user != null) {
       try {
+    	  
+    	
+    	  
         // 유저 Session으로 socket을 취득한 후 메시지를 전송한다.
         user.session.getBasicRemote().sendText(message);
+        
+        
       } catch (IOException e) {
         e.printStackTrace();
       }
